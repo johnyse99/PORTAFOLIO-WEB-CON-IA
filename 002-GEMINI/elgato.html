@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio IA - Juego del Gato</title>
+    <!-- Incluye Tailwind CSS para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados para la fuente Inter y el cuerpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Un color de fondo suave */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Incluye padding en el tamaño total */
+        }
+        /* Estilos para el contenedor del juego dentro de la landing page */
+        .game-container {
+            background-color: #ffffff; /* Fondo blanco para el contenedor del juego */
+            border-radius: 1.5rem; /* Bordes redondeados */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Sombra suave */
+            padding: 1.5rem;
+            max-width: 90%; /* Ancho máximo para responsividad */
+            width: 400px; /* Ancho fijo para el juego en pantallas grandes */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 0 auto; /* Centra el contenedor del juego */
+        }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual ancho */
+            grid-template-rows: repeat(3, 1fr); /* 3 filas de igual altura */
+            gap: 0.5rem; /* Espacio entre las celdas */
+            width: 100%;
+            max-width: 300px; /* Tamaño máximo del tablero */
+            aspect-ratio: 1 / 1; /* Mantiene el tablero cuadrado */
+        }
+        .cell {
+            background-color: #e2e8f0; /* Fondo gris claro para las celdas */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem; /* Tamaño grande para las marcas X/O */
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0.75rem; /* Bordes redondeados para las celdas */
+            transition: background-color 0.2s ease-in-out; /* Transición suave al pasar el ratón */
+            color: #333; /* Color predeterminado para las marcas */
+        }
+        .cell:hover {
+            background-color: #cbd5e0; /* Color más oscuro al pasar el ratón */
+        }
+        .cell.x-mark {
+            color: #ef4444; /* Color rojo para 'Gato' (X) */
+        }
+        .cell.o-mark {
+            color: #3b82f6; /* Color azul para 'Visitante' (O) */
+        }
+        .message-box {
+            background-color: #fefcbf; /* Fondo amarillo claro */
+            color: #92400e; /* Texto marrón oscuro */
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 500;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 1rem;
+            display: none; /* Oculto por defecto */
+        }
+        .message-box.show {
+            display: block; /* Mostrar cuando se necesite */
+        }
+    </style>
+</head>
+<body class="flex flex-col">
+    <!-- Header de la Landing Page -->
+    <header class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo o Nombre del Portafolio -->
+            <a href="#" class="text-2xl font-bold flex items-center">
+                <!-- Puedes reemplazar esto con tu logo SVG o imagen -->
+                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1l-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <span>Mi Portafolio IA</span>
+            </a>
+            <!-- Navegación (opcional) -->
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#" class="hover:text-blue-200 transition duration-300">Inicio</a></li>
+                    <li><a href="#" class="hover:text-blue-200 transition duration-300">Proyectos</a></li>
+                    <li><a href="#" class="hover:text-blue-200 transition duration-300">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sección Principal con el Juego y Descripción -->
+    <main class="flex-grow container mx-auto p-6 md:p-8 flex flex-col items-center justify-center">
+        <section class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 w-full max-w-4xl text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Juego del Gato con IA</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Este proyecto demuestra una implementación del clásico juego de "Gato" (Tic-Tac-Toe) con una inteligencia artificial desarrollada en JavaScript. La IA está diseñada para jugar estratégicamente, buscando ganar y bloquear los movimientos del oponente, además de incorporar un elemento de aleatoriedad en sus movimientos iniciales para una experiencia de juego más dinámica.
+                Es un ejemplo de cómo se pueden integrar lógicas de IA simples en aplicaciones web interactivas.
+            </p>
+            <p class="text-md text-gray-600">
+                ¡Intenta ganarle al Gato!
+            </p>
+        </section>
+
+        <!-- Contenedor del Juego del Gato -->
+        <div class="game-container">
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800">Juego del Gato con IA</h1>
+
+            <div id="statusDisplay" class="text-xl font-semibold text-gray-700">Turno de: Gato (X)</div>
+
+            <div class="flex justify-around w-full text-lg font-medium text-gray-600">
+                <div>Gato (X): <span id="gatoScore" class="text-red-500 font-bold">0</span></div>
+                <div>Visitante (O): <span id="visitanteScore" class="text-blue-500 font-bold">0</span></div>
+            </div>
+
+            <div class="game-grid" id="gameBoard">
+                <!-- Las celdas del juego se generarán con JavaScript -->
+            </div>
+
+            <button id="resetButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75">
+                Reiniciar Juego
+            </button>
+
+            <div id="messageBox" class="message-box"></div>
+        </div>
+    </main>
+
+    <!-- Footer de la Landing Page -->
+    <footer class="bg-gray-800 text-white p-6 mt-8 text-center">
+        <div class="container mx-auto">
+            <p>&copy; 2023 [Tu Nombre/Empresa]. Todos los derechos reservados.</p>
+            <p class="text-sm mt-2">Desarrollado con ❤️ y JavaScript.</p>
+            <!-- Nota de crédito a Gemini -->
+            <p class="text-xs mt-2 text-gray-400">
+                Este proyecto fue asistido en su desarrollo por Gemini.
+            </p>
+            <!-- Puedes añadir enlaces a tus redes sociales o más información aquí -->
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="hover:text-blue-400 transition duration-300">LinkedIn</a>
+                <a href="#" class="hover:text-blue-400 transition duration-300">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Variables globales para el estado del juego
+        let board = ['', '', '', '', '', '', '', '', '']; // Representa el tablero 3x3
+        let currentPlayer = 'X'; // 'X' para Gato (IA), 'O' para Visitante (Jugador)
+        let gameActive = true; // Indica si el juego está en curso
+        let scores = {
+            gato: 0,
+            visitante: 0
+        };
+
+        // Elementos del DOM
+        const gameBoard = document.getElementById('gameBoard');
+        const statusDisplay = document.getElementById('statusDisplay');
+        const gatoScoreDisplay = document.getElementById('gatoScore');
+        const visitanteScoreDisplay = document.getElementById('visitanteScore');
+        const resetButton = document.getElementById('resetButton');
+        const messageBox = document.getElementById('messageBox');
+
+        // Combinaciones ganadoras posibles (índices del tablero)
+        const winningConditions = [
+            [0, 1, 2], // Fila 1
+            [3, 4, 5], // Fila 2
+            [6, 7, 8], // Fila 3
+            [0, 3, 6], // Columna 1
+            [1, 4, 7], // Columna 2
+            [2, 5, 8], // Columna 3
+            [0, 4, 8], // Diagonal principal
+            [2, 4, 6]  // Diagonal secundaria
+        ];
+
+        // Constantes para posiciones estratégicas (esquinas y lados)
+        const corners = [0, 2, 6, 8];
+        const sides = [1, 3, 5, 7];
+
+        /**
+         * Muestra un mensaje en la caja de mensajes.
+         * @param {string} message - El mensaje a mostrar.
+         * @param {string} type - El tipo de mensaje (e.g., 'success', 'warning', 'error', 'info').
+         */
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            messageBox.className = 'message-box show'; // Restablece las clases y muestra
+            // Aplica estilos específicos según el tipo
+            switch (type) {
+                case 'success':
+                    messageBox.classList.add('bg-green-100', 'text-green-800');
+                    break;
+                case 'warning':
+                    messageBox.classList.add('bg-yellow-100', 'text-yellow-800');
+                    break;
+                case 'error':
+                    messageBox.classList.add('bg-red-100', 'text-red-800');
+                    break;
+                default: // info
+                    messageBox.classList.add('bg-blue-100', 'text-blue-800');
+                    break;
+            }
+            // Oculta después de 3 segundos
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                messageBox.className = 'message-box'; // Restablece al estado oculto predeterminado
+            }, 3000);
+        }
+
+        /**
+         * Inicializa el tablero del juego creando las celdas y reiniciando el estado.
+         */
+        function initializeGame() {
+            gameBoard.innerHTML = ''; // Limpia el tablero si ya existen celdas
+            board = ['', '', '', '', '', '', '', '', '']; // Reinicia el estado del tablero
+            currentPlayer = 'X'; // Gato (IA) siempre empieza
+            gameActive = true;
+            statusDisplay.textContent = 'Turno de: Gato (X)';
+            gatoScoreDisplay.textContent = scores.gato;
+            visitanteScoreDisplay.textContent = scores.visitante;
+            messageBox.classList.remove('show'); // Esconde cualquier mensaje anterior
+
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell', 'flex', 'items-center', 'justify-center');
+                cell.dataset.index = i; // Almacena el índice de la celda
+                cell.addEventListener('click', handleCellClick); // Añade el evento de click
+                gameBoard.appendChild(cell);
+            }
+
+            // Si el Gato (IA) es el primer jugador, haz que haga un movimiento inicial
+            if (currentPlayer === 'X') {
+                setTimeout(makeAIMove, 500); // Pequeño retraso para que parezca que "piensa"
+            }
+        }
+
+        /**
+         * Maneja el click en una celda del tablero por parte del jugador humano (Visitante).
+         * @param {Event} clickedCellEvent - El evento de click.
+         */
+        function handleCellClick(clickedCellEvent) {
+            const clickedCell = clickedCellEvent.target;
+            const clickedCellIndex = parseInt(clickedCell.dataset.index);
+
+            // Si la celda ya está ocupada, el juego no está activo, o no es el turno del Visitante, no hacer nada
+            if (board[clickedCellIndex] !== '' || !gameActive || currentPlayer === 'X') {
+                return;
+            }
+
+            // Actualiza el tablero y la interfaz para el movimiento del Visitante
+            board[clickedCellIndex] = currentPlayer;
+            clickedCell.textContent = currentPlayer;
+            clickedCell.classList.add('o-mark'); // Siempre 'O' para el Visitante
+
+            handleResultValidation();
+        }
+
+        /**
+         * Verifica si hay un ganador o un empate en el tablero actual.
+         * @param {Array<string>} currentBoard - El estado actual del tablero.
+         * @param {string} player - El jugador a verificar ('X' o 'O').
+         * @returns {boolean} - True si el jugador ha ganado, false en caso contrario.
+         */
+        function checkWin(currentBoard, player) {
+            for (let i = 0; i < winningConditions.length; i++) {
+                const winCondition = winningConditions[i];
+                let a = currentBoard[winCondition[0]];
+                let b = currentBoard[winCondition[1]];
+                let c = currentBoard[winCondition[2]];
+
+                if (a === player && b === player && c === player) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Lógica de la IA para encontrar el mejor movimiento para el Gato (X).
+         * @returns {number} - El índice de la celda donde la IA debe moverse.
+         */
+        function findBestMove() {
+            // Obtener todas las celdas vacías
+            const emptyCells = [];
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === '') {
+                    emptyCells.push(i);
+                }
+            }
+
+            // Si es el primer movimiento del juego (tablero completamente vacío), elige una posición aleatoria
+            if (emptyCells.length === 9) {
+                const randomIndex = Math.floor(Math.random() * emptyCells.length);
+                return emptyCells[randomIndex];
+            }
+
+            // 1. Verificar si 'X' puede ganar en el próximo movimiento
+            for (let i = 0; i < emptyCells.length; i++) {
+                const index = emptyCells[i];
+                board[index] = 'X'; // Simular movimiento
+                if (checkWin(board, 'X')) {
+                    board[index] = ''; // Deshacer simulación
+                    return index; // ¡Gato puede ganar!
+                }
+                board[index] = ''; // Deshacer simulación
+            }
+
+            // 2. Verificar si 'O' puede ganar y bloquearlo
+            for (let i = 0; i < emptyCells.length; i++) {
+                const index = emptyCells[i];
+                board[index] = 'O'; // Simular movimiento del oponente
+                if (checkWin(board, 'O')) {
+                    board[index] = ''; // Deshacer simulación
+                    return index; // Bloquear al oponente
+                }
+                board[index] = ''; // Deshacer simulación
+            }
+
+            // 3. Tomar el centro si está disponible
+            if (board[4] === '') {
+                return 4;
+            }
+
+            // 4. Tomar una esquina aleatoria si está disponible
+            const availableCorners = corners.filter(corner => board[corner] === '');
+            if (availableCorners.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableCorners.length);
+                return availableCorners[randomIndex];
+            }
+
+            // 5. Tomar un lado aleatorio si está disponible
+            const availableSides = sides.filter(side => board[side] === '');
+            if (availableSides.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableSides.length);
+                return availableSides[randomIndex];
+            }
+
+            // Si no hay movimientos estratégicos, devolver -1 (debería ser inalcanzable en un juego de Gato bien jugado)
+            return -1;
+        }
+
+        /**
+         * Realiza el movimiento de la IA (Gato).
+         */
+        function makeAIMove() {
+            if (!gameActive || currentPlayer !== 'X') {
+                return;
+            }
+
+            const bestMoveIndex = findBestMove();
+            if (bestMoveIndex !== -1) {
+                // Simula el click en la celda elegida por la IA
+                const cellElement = gameBoard.children[bestMoveIndex];
+                board[bestMoveIndex] = 'X'; // Actualiza el estado del tablero
+                cellElement.textContent = 'X';
+                cellElement.classList.add('x-mark'); // Siempre 'X' para el Gato
+
+                handleResultValidation();
+            }
+        }
+
+        /**
+         * Verifica si hay un ganador o un empate después de un movimiento.
+         */
+        function handleResultValidation() {
+            let roundWon = false;
+            // Usa la función checkWin general para el jugador actual
+            if (checkWin(board, currentPlayer)) {
+                roundWon = true;
+            }
+
+            if (roundWon) {
+                const winnerName = currentPlayer === 'X' ? 'Gato' : 'Visitante';
+                statusDisplay.textContent = `¡El ${winnerName} ha ganado!`;
+                showMessage(`¡El ${winnerName} ha ganado!`, 'success');
+                scores[winnerName.toLowerCase()]++; // Incrementa la puntuación del ganador
+                updateScoreDisplay(); // Actualiza la visualización de la puntuación
+                gameActive = false; // El juego termina
+                return;
+            }
+
+            // Si no hay ganador y todas las celdas están llenas, es un empate
+            let roundDraw = !board.includes('');
+            if (roundDraw) {
+                statusDisplay.textContent = '¡Empate!';
+                showMessage('¡Empate!', 'warning');
+                gameActive = false; // El juego termina
+                return;
+            }
+
+            // Si no hay ganador ni empate, cambia al siguiente jugador
+            changePlayer();
+        }
+
+        /**
+         * Cambia el turno al siguiente jugador y activa la IA si es el turno del Gato.
+         */
+        function changePlayer() {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            const nextPlayerName = currentPlayer === 'X' ? 'Gato' : 'Visitante';
+            statusDisplay.textContent = `Turno de: ${nextPlayerName} (${currentPlayer})`;
+
+            // Si es el turno del Gato (IA), haz que se mueva automáticamente
+            if (currentPlayer === 'X' && gameActive) {
+                setTimeout(makeAIMove, 700); // Pequeño retraso para la IA
+            }
+        }
+
+        /**
+         * Actualiza la visualización de las puntuaciones.
+         */
+        function updateScoreDisplay() {
+            gatoScoreDisplay.textContent = scores.gato;
+            visitanteScoreDisplay.textContent = scores.visitante;
+        }
+
+        /**
+         * Reinicia el juego, pero mantiene las puntuaciones.
+         */
+        function resetGame() {
+            initializeGame(); // Reutiliza la función de inicialización para reiniciar el tablero y el estado
+        }
+
+        // Event listener para el botón de reiniciar
+        resetButton.addEventListener('click', resetGame);
+
+        // Inicializa el juego cuando la ventana se carga
+        window.onload = initializeGame;
+    </script>
+</body>
+</html>
