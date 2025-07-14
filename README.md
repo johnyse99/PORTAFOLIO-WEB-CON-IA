@@ -57,16 +57,3 @@ Para explorar cualquiera de los proyectos:
 
     Abre el archivo index.html en tu navegador web preferido.
 
-Contacto
-
-¡Me encantaría conectar y discutir oportunidades!
-
-    Tu Nombre: [Tu Nombre Completo]
-
-    Correo Electrónico: [tu.correo@ejemplo.com]
-
-    LinkedIn: [Tu perfil de LinkedIn]
-
-    GitHub: [Tu perfil de GitHub]
-
-¡Gracias por visitar mi portafolio!
