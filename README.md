@@ -1,5 +1,4 @@
 # PORTAFOLIO-WEB-CON-IA
-PORTAFOLIO-WEB-CON IA
 
 Mi Portafolio de Proyectos Web con Asistencia de IA
 
@@ -7,6 +6,7 @@ Mi Portafolio de Proyectos Web con Asistencia de IA
 Sobre este Portafolio
 
 Este portafolio tiene como objetivo mostrar mis capacidades técnicas en el desarrollo front-end y mi enfoque innovador al incorporar la Inteligencia Artificial en el proceso creativo. Cada proyecto aquí es un testimonio de cómo la IA puede potenciar la eficiencia, la experimentación y la generación de soluciones originales.
+
 Asistencia de Inteligencia Artificial
 
 Es importante destacar que varios de los proyectos incluidos en este portafolio han sido desarrollados con la asistencia de modelos de Inteligencia Artificial, específicamente Gemini. Esta colaboración con la IA me ha permitido:
@@ -24,13 +24,15 @@ Proyectos Destacados (Ejemplos)
 
 Aquí hay un vistazo a algunos tipos de proyectos que podrías encontrar en este portafolio:
 
-    Juego del Gato (Tic-Tac-Toe) con IA: Una implementación del clásico juego de "Gato" con una inteligencia artificial que juega estratégicamente y con un toque de aleatoriedad.
+    Tic-Tac-Toe (Gemini) con IA: Una implementación del clásico juego de "Gato" con una inteligencia artificial que juega estratégicamente y con un toque de aleatoriedad.
 
-    Visualizador de Datos Interactivo: Una aplicación web que permite cargar y visualizar datos en diferentes formatos de gráficos, mostrando la capacidad de presentar información de manera clara y atractiva.
+    Visualizador de Datos Interactivo (Gemini): Una aplicación web que permite cargar y visualizar datos en diferentes formatos de gráficos, mostrando la capacidad de presentar información de manera clara y atractiva.
 
-    [Nombre de otro proyecto 1]: Breve descripción del proyecto.
+    Portafoli (DeepSeek): Portafolio simple geberado con IA.
 
-    [Nombre de otro proyecto 2]: Breve descripción del proyecto.
+    TodoList (DeepSeek): TodoList simple y minimalistata generado con IA.
+
+    Snake Game (Trae): Juego del snake simple pero funcional generado con esta IA.
 
 Cada proyecto reside en su propio directorio con su propio archivo index.html (o similar) y archivos de soporte.
 Tecnologías Utilizadas
