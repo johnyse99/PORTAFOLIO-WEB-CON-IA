@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Datos</title>
+    <!-- Incluye Tailwind CSS para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados para la fuente Inter y el cuerpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Un color de fondo suave */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+            margin: 0;
+            padding: 20px; /* Espaciado alrededor del contenido */
+            box-sizing: border-box; /* Incluye padding en el tamaño total */
+        }
+        canvas {
+            background-color: #ffffff; /* Fondo blanco para el lienzo */
+            border-radius: 1rem; /* Bordes redondeados */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Sombra suave */
+            max-width: 100%; /* Asegura que el lienzo sea responsivo */
+            height: auto; /* Mantiene la proporción */
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-6 md:p-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6">Visualización de Datos de Ejemplo</h1>
+        <p class="text-center text-gray-600 mb-8">
+            Este es un gráfico de barras simple. Puedes modificar los datos en el código JavaScript para ver diferentes visualizaciones.
+        </p>
+        <div class="relative w-full h-96">
+            <canvas id="myBarChart" class="w-full h-full"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Espera a que la ventana se cargue completamente antes de ejecutar el script
+        window.onload = function() {
+            const canvas = document.getElementById('myBarChart');
+            const ctx = canvas.getContext('2d');
+
+            // Datos de ejemplo para el gráfico de barras
+            // Puedes cambiar estos datos para visualizar diferentes conjuntos
+            const data = {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                values: [120, 190, 300, 180, 250, 350]
+            };
+
+            // Función para dibujar el gráfico de barras
+            function drawBarChart() {
+                // Limpia el lienzo antes de redibujar
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Configuración del gráfico
+                const chartWidth = canvas.width - 80; // Ancho del área del gráfico (con margen)
+                const chartHeight = canvas.height - 80; // Altura del área del gráfico (con margen)
+                const barWidth = chartWidth / data.labels.length - 10; // Ancho de cada barra
+                const maxValue = Math.max(...data.values); // Valor máximo para escalar el gráfico
+                const scaleFactor = chartHeight / maxValue; // Factor de escala para la altura de las barras
+
+                // Dibuja el eje Y (vertical)
+                ctx.beginPath();
+                ctx.moveTo(60, 20);
+                ctx.lineTo(60, chartHeight + 20);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Dibuja el eje X (horizontal)
+                ctx.beginPath();
+                ctx.moveTo(60, chartHeight + 20);
+                ctx.lineTo(chartWidth + 60, chartHeight + 20);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Dibuja las barras y las etiquetas
+                data.values.forEach((value, index) => {
+                    const barHeight = value * scaleFactor;
+                    const x = 70 + index * (barWidth + 10); // Posición X de la barra
+                    const y = chartHeight + 20 - barHeight; // Posición Y de la barra (desde abajo)
+
+                    // Dibuja la barra
+                    ctx.fillStyle = '#4299e1'; // Color azul de Tailwind
+                    ctx.fillRect(x, y, barWidth, barHeight);
+
+                    // Dibuja la etiqueta del valor en la barra
+                    ctx.fillStyle = '#fff'; // Color blanco para el texto
+                    ctx.font = '12px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(value, x + barWidth / 2, y + 15);
+
+                    // Dibuja la etiqueta del eje X
+                    ctx.fillStyle = '#333'; // Color oscuro para el texto
+                    ctx.font = '14px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(data.labels[index], x + barWidth / 2, chartHeight + 40);
+                });
+
+                // Dibuja las marcas y etiquetas del eje Y
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Inter';
+                ctx.textAlign = 'right';
+                for (let i = 0; i <= 5; i++) {
+                    const yTick = chartHeight + 20 - (chartHeight / 5) * i;
+                    const valueTick = (maxValue / 5) * i;
+                    ctx.fillText(Math.round(valueTick), 50, yTick + 4);
+                    ctx.beginPath();
+                    ctx.moveTo(55, yTick);
+                    ctx.lineTo(60, yTick);
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+
+            // Función para redimensionar el lienzo y redibujar el gráfico
+            function resizeCanvas() {
+                // Establece el tamaño del lienzo para que coincida con su tamaño de visualización
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                drawBarChart();
+            }
+
+            // Llama a resizeCanvas inicialmente y cuando la ventana se redimensiona
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        };
+    </script>
+</body>
+</html>
