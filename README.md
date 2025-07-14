@@ -32,7 +32,7 @@ Aquí hay un vistazo a algunos tipos de proyectos que podrías encontrar en este
 
     TodoList (DeepSeek): TodoList simple y minimalistata generado con IA.
 
-    Snake Game (Trae): Juego del snake simple pero funcional generado con esta IA.
+    Snake Game (Trae): Juego del Snake simple pero funcional generado con esta IA.
 
 Cada proyecto reside en su propio directorio con su propio archivo index.html (o similar) y archivos de soporte.
 Tecnologías Utilizadas
